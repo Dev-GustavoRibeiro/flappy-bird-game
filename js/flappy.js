@@ -43,5 +43,38 @@ function Barriers(height, gap, x) {
     this.setX(x)
 }
 
-const b = new Barriers(700, 200, 400)
-document.querySelector('[flappy]').appendChild(b.element)
+// const b = new Barriers(700, 200, 400)
+// document.querySelector('[flappy]').appendChild(b.element)
+
+function MoveBarriers(height, width, gap, space, notifyPoint) {
+    this.pairs = [
+        new Barriers(height, gap, width), 
+        new Barriers(height, gap, width + space),
+        new Barriers(height, gap, width + space * 2), 
+        new Barriers(height, gap, width + space * 3)
+    ]
+
+    const displacement = 3
+    this.animate = () => {
+        this.pairs.forEach(pair => {
+            pair.setX(pair.getX() - displacement)
+
+            if (pair.getX() < -pair.getWidth()) {
+                pair.setX(pair.getX() + space * this.pairs.length)
+                pair.randomGap()
+            }
+
+            const middle = width / 2
+            const crossedTheMiddle = pair.getX() + displacement >= middle
+                && pair.getX() < middle
+            crossedTheMiddle && notifyPoint()
+        })
+    }
+}
+
+const barriers = new MoveBarriers(700, 1200, 200, 400)
+const gameArea = document.querySelector('[flappy]')
+barriers.pairs.forEach(pair => gameArea.appendChild(pair.element))
+setInterval(() => {
+    barriers.animate()
+}, 20);
