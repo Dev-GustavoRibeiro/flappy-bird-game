@@ -141,6 +141,7 @@ function FlappyBird() {
     barriers.pairs.forEach(pair => gameArea.appendChild(pair.element))
 
     this.start = () => {
+        
         const timer = setInterval(() => {
            barriers.animate()
            bird.animate() 
@@ -152,4 +153,15 @@ function FlappyBird() {
     }
 }
 
-new FlappyBird().start()
+let game = new FlappyBird()
+let startGameCounter = 0
+window.onkeypress = e => {
+    
+    e = e || window.event
+    let key = e.keyCode || e.which
+
+    if (key == 32 && startGameCounter == 0) {
+        startGameCounter = 1
+        game.start()
+    }
+}
