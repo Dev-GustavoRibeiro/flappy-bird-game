@@ -1,3 +1,25 @@
+const spaceBar = document.querySelector('.space-bar')
+const startMenu = document.querySelector('.start-menu')
+
+const animationPressSpace = () => {
+    spaceBar.style.backgroundColor = '#D1D1D1'
+    spaceBar.style.border = 'solid rgb(245, 245, 245) 1px'
+    spaceBar.style.padding = '8px 68px'
+    spaceBar.style.boxShadow = '0px 0px 10px 0px #000000'
+    spaceBar.style.marginTop = '32px'
+}
+
+const resetSpace = () => {
+    spaceBar.style.backgroundColor = 'rgb(245, 245, 245)'
+    spaceBar.style.border = 'none'
+    spaceBar.style.padding = '10px 70px'
+    spaceBar.style.boxShadow = '0px 5px 11px 1px #000000'
+    spaceBar.style.marginTop = '30px'
+} 
+
+const pressSpaceBar = setInterval(animationPressSpace, 750)
+const resetSpaceBar = setInterval(resetSpace, 1500)
+
 function newElement(tagName, className) {
     const element = document.createElement(tagName)
     element.className = className
@@ -162,6 +184,7 @@ window.onkeypress = e => {
 
     if (key == 32 && startGameCounter == 0) {
         startGameCounter = 1
+        startMenu.style.display = 'none'
         game.start()
     }
 }
