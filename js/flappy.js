@@ -15,10 +15,6 @@ function Barrier(reverse =false) {
     this.setHeigth = height => body.style.height = `${height}px`
 }
 
-// const b = new Barrier()
-// b.setHeigth(200)
-// document.querySelector('[flappy]').appendChild(b.element)
-
 function Barriers(height, gap, x) {
     this.element = newElement('div', 'barriers')
 
@@ -42,9 +38,6 @@ function Barriers(height, gap, x) {
     this.randomGap()
     this.setX(x)
 }
-
-// const b = new Barriers(700, 200, 400)
-// document.querySelector('[flappy]').appendChild(b.element)
 
 function MoveBarriers(height, width, gap, space, notifyPoint) {
     this.pairs = [
@@ -85,7 +78,7 @@ function Bird(heightGame) {
     window.onkeyup = e => flying = false
 
     this.animate = () => {
-        const newY = this.getY() + (flying ? 8 : -5)
+        const newY = this.getY() + (flying ? 8 : -6)
         const maxHeight = heightGame - this.element.clientHeight
 
         if (newY <= 0) {
@@ -99,23 +92,36 @@ function Bird(heightGame) {
     this.setY(heightGame / 2)
 }
 
-// const barriers = new MoveBarriers(700, 1200, 200, 400)
-// const bird = new Bird(700)
-// const gameArea = document.querySelector('[flappy]')
-
-// gameArea.appendChild(bird.element)
-// barriers.pairs.forEach(pair => gameArea.appendChild(pair.element))
-// setInterval(() => {
-//     barriers.animate()
-//     bird.animate()
-// }, 20);
-
 function Progress() {
     this.element = newElement('span', 'progress')
     this.updatePoints = points => {
         this.element.innerHTML = points
     }
     this.updatePoints(0)
+}
+
+function areOverlapping(Aelement, Belement) {
+    const a = Aelement.getBoundingClientRect()
+    const b = Belement.getBoundingClientRect()
+
+    const horizontal = a.left + a.width >= b.left
+        && b.left + b.width >= a.left
+    const vertical = a.top + a.height >= b.top
+        && b.top + b.height >= a.top
+    return horizontal && vertical
+}
+
+function collided(bird, barriers) {
+    let collided = false
+    barriers.pairs.forEach(Barriers => {
+        if (!collided) {
+            const superior = Barriers.superior.element
+            const inferior = Barriers.inferior.element
+            collided = areOverlapping(bird.element, superior) 
+                || areOverlapping(bird.element, inferior)
+        }
+    })
+    return collided
 }
 
 function FlappyBird() {
@@ -138,6 +144,10 @@ function FlappyBird() {
         const timer = setInterval(() => {
            barriers.animate()
            bird.animate() 
+
+           if(collided(bird, barriers)) {
+               clearInterval(timer)
+           }
         }, 20);
     }
 }
