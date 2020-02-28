@@ -122,6 +122,18 @@ function Progress() {
     this.updatePoints(0)
 }
 
+function GameOver() {
+    this.element = newElement('div', 'game-over')
+    const gameOverImage = newElement('img', 'game-over-image')
+    const message = newElement('p', 'p3')
+
+    gameOverImage.src = 'imgs/game-over.png'
+    message.innerHTML = 'Press "R" to restart the game'
+
+    this.element.appendChild(gameOverImage)
+    this.element.appendChild(message)
+}
+
 function areOverlapping(Aelement, Belement) {
     const a = Aelement.getBoundingClientRect()
     const b = Belement.getBoundingClientRect()
@@ -157,7 +169,7 @@ function FlappyBird() {
     const barriers = new MoveBarriers(height, width, 200, 400, 
         () => progress.updatePoints(++points))
     const bird = new Bird(height)
-
+    const gameOver = new GameOver()
     gameArea.appendChild(progress.element)
     gameArea.appendChild(bird.element)
     barriers.pairs.forEach(pair => gameArea.appendChild(pair.element))
@@ -170,6 +182,7 @@ function FlappyBird() {
 
            if(collided(bird, barriers)) {
                clearInterval(timer)
+               gameArea.appendChild(gameOver.element)
            }
         }, 20);
     }
@@ -182,9 +195,13 @@ window.onkeypress = e => {
     e = e || window.event
     let key = e.keyCode || e.which
 
+    console.log(key)
+
     if (key == 32 && startGameCounter == 0) {
         startGameCounter = 1
         startMenu.style.display = 'none'
         game.start()
+    } else if (key == 114) {
+        location.reload(true)
     }
 }
