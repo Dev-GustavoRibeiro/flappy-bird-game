@@ -179,6 +179,7 @@ function FlappyBird() {
         const timer = setInterval(() => {
            barriers.animate()
            bird.animate() 
+           scrollTo(0, 0)
 
            if(collided(bird, barriers)) {
                clearInterval(timer)
@@ -194,8 +195,6 @@ window.onkeypress = e => {
     
     e = e || window.event
     let key = e.keyCode || e.which
-
-    console.log(key)
 
     if (key == 32 && startGameCounter == 0) {
         startGameCounter = 1
