@@ -95,9 +95,9 @@ body {
 }
 
 .floor {
-    position: fixed;
-    bottom: 50px;
+    position: absolute;
     width: 1190px;
+    bottom: 0;
     background-color: rgb(131, 78, 48);
     padding: 10px 15px;
     border-top: solid 7px rgb(60, 134, 60);
